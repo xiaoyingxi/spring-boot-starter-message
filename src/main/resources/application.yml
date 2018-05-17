@@ -1,0 +1,25 @@
+server.port: 8012
+spring:
+  #application.name: validate
+  #profiles.active: dev
+  cloud.config.failFast: true
+
+---
+spring:
+  profiles: dev
+  cloud:
+    config:
+      uri: http://localhost:8888
+
+---
+spring:
+  profiles: svt
+  cloud:
+    config:
+      uri: http://pilipa-configserver:8888
+---
+spring:
+  profiles: production
+  cloud:
+    config:
+      uri: http://pilipa-configserver:8888
