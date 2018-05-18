@@ -1,5 +1,5 @@
 spring:
-  #application.name: validate
+  application.name: validate
   profiles.active: dev
   cloud.config.failFast: true
 

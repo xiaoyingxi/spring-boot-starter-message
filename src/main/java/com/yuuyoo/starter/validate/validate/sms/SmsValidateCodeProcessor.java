@@ -4,12 +4,14 @@
 package com.yuuyoo.starter.validate.validate.sms;
 
 
+import com.alibaba.fastjson.JSON;
 import com.yuuyoo.starter.validate.validate.AbstractValidateProcessor;
 import com.yuuyoo.starter.validate.validate.ValidateCode;
 import com.yuuyoo.starter.validate.validate.ValidateException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.ServletWebRequest;
+import java.io.IOException;
 
 /**
  * 短信验证码处理器
@@ -22,13 +24,14 @@ public class SmsValidateCodeProcessor extends AbstractValidateProcessor<Validate
 
 
 	@Override
-	protected ValidateCode generate(ServletWebRequest request) {
+	protected ValidateCode generate(ServletWebRequest request) throws IOException {
 		String mobile = request.getParameter("mobile");
-		String device = request.getParameter("device");
-		if(StringUtils.isEmpty(device)){
-			throw new ValidateException("deviceId不能为空");
+		if(StringUtils.isEmpty(mobile)){
+			throw new ValidateException("mobile不能为空");
 		}
-		return validateCodeGenerator.sms(mobile,device).getBody();
+		String resStr = validateCodeGenerator.sms(mobile).getBody();
+		ValidateCode validateCode = JSON.parseObject(resStr,ValidateCode.class);
+		return validateCode;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.yuuyoo.starter.validate.validate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
+import java.io.IOException;
 
 /**
  * 抽象的图形验证码处理器
@@ -24,6 +26,9 @@ public abstract class AbstractValidateProcessor<C extends ValidateCode> implemen
   @Autowired
   private ValidateCodeRepository validateCodeRepository;
 
+  @Autowired
+  protected ObjectMapper objectMapper;
+
 
   @Override
   public String create(ServletWebRequest request) throws Exception {
@@ -40,7 +45,7 @@ public abstract class AbstractValidateProcessor<C extends ValidateCode> implemen
    * @return
    */
   @SuppressWarnings("unchecked")
-  protected abstract C generate(ServletWebRequest request);
+  protected abstract C generate(ServletWebRequest request) throws IOException;
 
   /**
    * 保存校验码
@@ -85,7 +90,7 @@ public abstract class AbstractValidateProcessor<C extends ValidateCode> implemen
     String codeInRequest;
     try {
       codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(),
-          codeType.getParamNameOnValidate());
+          "code");
     } catch (ServletRequestBindingException e) {
       throw new ValidateException("获取验证码的值失败");
     }
@@ -98,7 +103,7 @@ public abstract class AbstractValidateProcessor<C extends ValidateCode> implemen
       throw new ValidateException(codeType + "验证码不存在");
     }
 
-    if (codeInSession.isExpried()) {
+    if (codeInSession.alreadExpried()) {
       validateCodeRepository.remove(request, codeType);
       throw new ValidateException(codeType + "验证码已过期");
     }

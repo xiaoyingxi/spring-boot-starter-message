@@ -94,6 +94,7 @@ public class ValidateFilter extends OncePerRequestFilter implements Initializing
         logger.info("验证码校验通过");
       } catch (ValidateException exception) {
         //authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
+        logger.info(exception.getMessage());
         return;
       }
     }

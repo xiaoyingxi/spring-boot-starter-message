@@ -1,16 +1,17 @@
 package com.yuuyoo.starter.validate.validate;
 
-import lombok.Builder;
 import lombok.Data;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.TimeZone;
 
 /**
  * @Description: 校验码信息
  * @Auther: dave
  * @Date: 2018/5/16 13:06
  */
-@Builder
 @Data
 public class ValidateCode implements Serializable {
 
@@ -22,7 +23,14 @@ public class ValidateCode implements Serializable {
 
   public ValidateCode(String code, int expireIn){
     this.code = code;
-    this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
+    this.expireTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(expireIn),
+        TimeZone.getDefault().toZoneId());
+  }
+
+  public ValidateCode(String code, long time){
+    this.code = code;
+    this.expireTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time),
+        TimeZone.getDefault().toZoneId());
   }
 
   public ValidateCode(String code, LocalDateTime expireTime){
@@ -30,7 +38,7 @@ public class ValidateCode implements Serializable {
     this.expireTime = expireTime;
   }
 
-  public boolean isExpried() {
+  public boolean alreadExpried() {
     return LocalDateTime.now().isAfter(expireTime);
   }
 }

@@ -24,6 +24,11 @@ public class ImageCode extends ValidateCode {
 		super(code, expireIn);
 		this.image = image;
 	}
+
+	public ImageCode(String image, String code, long expireIn){
+		super(code, expireIn);
+		this.image = image;
+	}
 	
 	public ImageCode(String image, String code, LocalDateTime expireTime){
 		super(code, expireTime);

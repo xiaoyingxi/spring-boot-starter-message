@@ -6,9 +6,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
 @SpringBootApplication
-public class MessageApplication {
+public class ValidateApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MessageApplication.class, args);
+    SpringApplication.run(ValidateApplication.class, args);
   }
 }

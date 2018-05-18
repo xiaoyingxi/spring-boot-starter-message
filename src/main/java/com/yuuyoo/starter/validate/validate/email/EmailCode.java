@@ -15,6 +15,10 @@ public class EmailCode extends ValidateCode {
     super(code, expireIn);
   }
 
+  public EmailCode(String code, long expireIn) {
+    super(code, expireIn);
+  }
+
   public EmailCode(String code, LocalDateTime expireTime) {
     super(code, expireTime);
   }
